@@ -109,13 +109,13 @@ public class Dashboard extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Mem_ID", "Last Name", "First Name", "Title 4"
+                "Mem_ID", "Last Name", "First Name", "Membership Type", "Starting Date", "Expiration Date"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
