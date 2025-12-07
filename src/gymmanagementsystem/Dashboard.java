@@ -4,6 +4,11 @@
  */
 package gymmanagementsystem;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author admin
@@ -15,8 +20,57 @@ public class Dashboard extends javax.swing.JFrame {
      */
     public Dashboard() {
         initComponents();
-    
-        setLayout(null);
+        PreparedStatement ps;
+        ResultSet rs;
+        
+        //Populate Subcription Table
+            DefaultTableModel subTable = (DefaultTableModel)jTable3.getModel();
+            subTable.setRowCount(0);
+            String getSubQuery = "Select * FROM tbl_subcription";
+            try{
+                ps = MyConnection.getConnection().prepareStatement(getSubQuery);
+                rs = ps.executeQuery();
+                while(rs.next()){
+                    String sub_id = String.valueOf(rs.getInt("sub_id"));
+                    String sub_name = String.valueOf(rs.getString("sub_name"));
+                    String price = String.valueOf(rs.getInt("price"));
+                    String duration = String.valueOf(rs.getString("duration"));
+                    
+                    String subRecord[] = {sub_id, sub_name, price, duration};
+                    subTable.addRow(subRecord);
+                    
+                }
+            }catch(Exception e){
+               e.printStackTrace();
+               JOptionPane.showMessageDialog(null, "Database Error: " + e.getMessage());
+            }
+        //end of Populate Subcription Table
+        
+        
+        
+        
+        //Populate Admin Table
+           DefaultTableModel adminTable = (DefaultTableModel)jTable2.getModel();
+           adminTable.setRowCount(0);
+           String getAdminQuery = "Select admin_id, username, role FROM tbl_admin;";
+           try{
+               
+               ps = MyConnection.getConnection().prepareStatement(getAdminQuery);         
+               rs = ps.executeQuery();
+               while(rs.next()){
+                   String admin_id = String.valueOf(rs.getInt("admin_id"));
+                   String username = String.valueOf(rs.getString("username"));
+                   String role = String.valueOf(rs.getString("role"));
+                   
+                   String adminRecord[] = {admin_id,username,role};
+                   adminTable.addRow(adminRecord);
+                   
+               }
+           }catch(Exception e){
+               e.printStackTrace();
+               JOptionPane.showMessageDialog(null, "Database Error: " + e.getMessage());
+           }
+        //end of Populate Admin Table
     }
     
     /**
@@ -35,7 +89,11 @@ public class Dashboard extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
@@ -57,13 +115,13 @@ public class Dashboard extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Mem_ID", "Last Name", "First Name", "Membership Type", "Starting Date", "Expiration Date"
+                "Mem_ID", "Last Name", "First Name", "Membership Type", "Expiration Date"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -99,28 +157,62 @@ public class Dashboard extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("MEMBERS", jPanel1);
 
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Subcription ID", "Name", "Price", "Duration"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable3);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 750, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 139, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 675, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 195, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("SUBCRIPTIONS", jPanel2);
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Admin ID", "Username", "Role"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable2);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 750, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 596, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 154, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 675, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 650, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 25, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("ADMIN", jPanel3);
@@ -174,7 +266,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
-                .addContainerGap(380, Short.MAX_VALUE))
+                .addContainerGap(384, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -255,7 +347,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addContainerGap(404, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 70, -1, 660));
+        getContentPane().add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 70, 150, 660));
 
         pack();
         setLocationRelativeTo(null);
@@ -334,7 +426,11 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
     // End of variables declaration//GEN-END:variables
 }
