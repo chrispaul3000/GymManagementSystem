@@ -32,6 +32,7 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jCheckBox1 = new javax.swing.JCheckBox();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -39,8 +40,11 @@ public class Login extends javax.swing.JFrame {
         jPasswordField1 = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        showPasswordCB = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+
+        jCheckBox1.setText("jCheckBox1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,6 +74,13 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
+        showPasswordCB.setText("show password");
+        showPasswordCB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showPasswordCBActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -83,6 +94,7 @@ public class Login extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(79, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(showPasswordCB)
                     .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -100,7 +112,9 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(showPasswordCB)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
@@ -156,10 +170,13 @@ public class Login extends javax.swing.JFrame {
         String uname = jTextField1.getText();
         String pass = String.valueOf(jPasswordField1.getPassword());
         
-        String query = "SELECT * FROM `tbl_admin` WHERE `username` =? AND `password` =?";
+        
+        String LoginQuery = "SELECT * FROM `tbl_admin` WHERE `username` =? AND `password` =?";
+        
+        String addLogQuery = "INSERT INTO tbl_admin_log (username, action) VALUES (?, ?)";
         
         try {
-            ps = MyConnection.getConnection().prepareStatement(query);
+            ps = MyConnection.getConnection().prepareStatement(LoginQuery);
             
             ps.setString(1,uname);
             ps.setString(2,pass);
@@ -167,7 +184,14 @@ public class Login extends javax.swing.JFrame {
             
             if (rs.next())
             {
-                Dashboard pi = new Dashboard();
+                ps.close();
+                //Add Log to Database
+                ps = MyConnection.getConnection().prepareStatement(addLogQuery);
+                ps.setString(1, uname);
+                ps.setString(2, "Logged In");
+                ps.executeUpdate();
+
+                Dashboard pi = new Dashboard(uname);
                 pi.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(null, "INVALID USERNAME OR PASSWORD");
@@ -186,6 +210,15 @@ public class Login extends javax.swing.JFrame {
     private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jPasswordField1ActionPerformed
+
+    private void showPasswordCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPasswordCBActionPerformed
+        // TODO add your handling code here:
+        if (showPasswordCB.isSelected()) {
+        jPasswordField1.setEchoChar((char) 0); // show password
+    } else {
+        jPasswordField1.setEchoChar('•'); // hide password
+    }
+    }//GEN-LAST:event_showPasswordCBActionPerformed
 
     /**
      * @param args the command line arguments
@@ -225,6 +258,7 @@ public class Login extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -232,6 +266,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JCheckBox showPasswordCB;
     // End of variables declaration//GEN-END:variables
 
     private void close() {
